@@ -1,11 +1,13 @@
 from email.MIMEText import MIMEText
 import smtplib
+import logging
 
 
-class SMTPHandler(object):
+class SMTPHandler(logging.Handler):
 
     def __init__(self, mailhost, fromaddr, toaddrs,
                  subject, credentials=None, secure=None):
+        logging.Handler.__init__(self)
         self.mailhost = mailhost
         self.fromaddr = fromaddr
         self.toaddrs = toaddrs
@@ -48,6 +50,7 @@ class SMTPHandler(object):
 
 
     def emit(self, record):
+        message = self.format(record)
         mail = self.create_email(self.getSubject(record),
-                                 record)
+                                 message)
         self.send_mail(mail)
