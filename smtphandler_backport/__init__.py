@@ -10,7 +10,8 @@ class SMTPHandler(object):
         self.fromaddr = fromaddr
         self.toaddrs = toaddrs
         self.subject = subject
-        self.smtp_username, self.smtp_password = credentials
+        self.smtp_username, self.smtp_password = (credentials if credentials
+                                                  else (None, None))
         self.secure = secure
 
 
@@ -23,6 +24,8 @@ class SMTPHandler(object):
         email['To'] = self.toaddrs
         return email
 
+    def getSubject(self, record):
+        return self.subject
 
     def send_mail(self, email):
         server = smtplib.SMTP(self.mailhost)
@@ -43,5 +46,6 @@ class SMTPHandler(object):
 
 
     def emit(self, record):
-        mail = self.create_email(self.subject, record)
+        mail = self.create_email(self.getSubject(record),
+                                 record)
         self.send_mail(mail)
