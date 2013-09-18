@@ -24,8 +24,10 @@ class SMTPHandler(object):
         email['To'] = self.toaddrs
         return email
 
+
     def getSubject(self, record):
         return self.subject
+
 
     def send_mail(self, email):
         server = smtplib.SMTP(self.mailhost)
